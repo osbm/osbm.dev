@@ -1,6 +1,9 @@
 html {
-    background-color: #f1f5f9;
-    font-family: sans-serif;
+    background-color: rgb(20, 25, 40);
+    /* nerd font */
+    font-family: 'nerd-font';
+    color: white;
+    font-size: 16px;
 }
 
 body {
@@ -18,4 +21,14 @@ body {
 h1 {
     margin: 1rem 0;
     font-size: 2.5rem;
+    /* slighly purple but mostly white title */
+    color: rgb(200, 200, 255);
+}
+
+a {
+    color: rgb(0, 255, 255);
+}
+
+a:hover {
+    color: rgb(0, 200, 200);
 }
