@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# i dont know why astro keeps re-creating this file
+src/env.d.ts
