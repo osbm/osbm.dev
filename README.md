@@ -1,2 +1,1 @@
-# osbm.dev
-the website
+#TODO beautify this file
