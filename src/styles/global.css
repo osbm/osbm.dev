@@ -3,25 +3,48 @@ html {
     /* nerd font */
     font-family: 'nerd-font';
     color: white;
+    height: 100%;
     font-size: 16px;
-}
-
-body {
-    margin: 0 auto;
-    width: 100%;
-    max-width: 80ch;
-    padding: 1rem;
-    line-height: 1.5;
 }
 
 * {
     box-sizing: border-box;
 }
 
+body {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 90ch;
+    padding: 1rem;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+}
+
+header {
+
+}
+
+/* there are special classes in a tags in hearder */
+header a {
+    color: rgb(255, 255, 255);
+    margin-right: 1rem;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
 h1 {
     margin: 1rem 0;
     font-size: 2.5rem;
-    /* slighly purple but mostly white title */
     color: rgb(200, 200, 255);
 }
 

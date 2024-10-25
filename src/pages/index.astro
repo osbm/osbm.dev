@@ -1,13 +1,32 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import "../styles/global.css";
+
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Metadata from "../components/Metadata.astro";
 ---
 
-<Layout title="osbm index">
-  <h1>Welcome to my site</h1>
-  <p>This is a simple site built with Astro</p>
+<!doctype html>
+<html lang="en">
+  <head>
+    <Metadata />
+    <title>osbm</title>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>About myself</h1>
 
-I am building this site.
+      AI researcher, programmer, open-source enthusiast.
+      <br />
+      Github: <a href="https://github.com/osbm">osbm</a>
+      Hugging Face: <a href="https://huggingface.co/osbm">osbm</a>
 
-please see <a href="https://osmanbayram.com">osmanbayram.com</a> my current main page
-
-</Layout>
+      <p>
+        Please forgive me for the design of this website. I am very new at this.
+        I will learn CSS and make it look better soon. I promise
+      </p>
+    </main>
+    <Footer />
+  </body>
+</html>
