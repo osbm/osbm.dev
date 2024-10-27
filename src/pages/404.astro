@@ -16,8 +16,17 @@ import Metadata from "../components/Metadata.astro";
     <Header />
     <main>
         <h1>404 Not found</h1>
-        <p>Hey you are not supposed to be here.</p>
+        <p>Hey, you are not supposed to be here. But since you are here</p>
     </main>
     <Footer />
   </body>
+  <style>
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+  </style>
 </html>
