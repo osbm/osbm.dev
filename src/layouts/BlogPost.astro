@@ -1,49 +1,86 @@
 ---
-
 import "../styles/global.css";
 
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Metadata from "../components/Metadata.astro";
 
-import FormattedDate from '../components/FormattedDate.astro';
-import type { CollectionEntry } from 'astro:content';
+import FormattedDate from "../components/FormattedDate.astro";
+import type { CollectionEntry } from "astro:content";
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, filename, heroImage } = Astro.props;
+
+const commitHistoryUrl = "https://github.com/osbm/osbm.dev/commits/main/src/content/blog/" + filename;
+
 ---
 
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <Metadata />
-    <title>{title}</title>
-</head>
-<body>
-    <Header />
-    <main>
-        <article>
+    <head>
+        <Metadata />
+        <title>{title}</title>
+    </head>
+    <body>
+        <Header />
+        <main>
+            <article>
+                <div class="hero-image">
+                    {
+                        heroImage && (
+                            <img
+                                width={1020}
+                                height={510}
+                                src={heroImage}
+                                alt=""
+                            />
+                        )
+                    }
+                </div>
+                <div class="header">
+                    <div class="title">
+                        <h1>{title}</h1>
+                    </div>
+                    <div class="date">
+                        <FormattedDate date={pubDate} />
+                        {
+                            updatedDate && (
+                                <div class="last-updated-on">
+                                    Last updated on
+                                    <FormattedDate date={updatedDate} />
+                                    <a href={commitHistoryUrl} class="commit-history">
+                                        Commit history
+                                    </a>
+                                </div>
+                            )
+                        }
+                    </div>
+                </div>
+                <hr />
+                <div class="blog-body">
+                    <slot />
+                </div>
+            </article>
+        </main>
+        <Footer />
+    </body>
+    <style>
+        div.header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            <div class="hero-image">
-                {heroImage && <img width={1020} height={510} src={heroImage} alt="" />}
-            </div>
-            <div class="header">
-                <div class="title">
-                    <h1>{title}</h1>
-                </div>
-                <div class="date">
-                    <FormattedDate date={pubDate} />
-                    {updatedDate && <div class="last-updated-on">Last updated on <FormattedDate date={updatedDate} /></div>}
-                </div>
-            </div>
-            <hr />
-            <div class="blog-body">
-                <slot />
-            </div>
-        </article>
-    </main>
-    <Footer />
-</body>
+        /* change font size in the header title */
+        div.title h1 {
+            font-size: 2rem;
+        }
+
+        hr {
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+    </style>
 </html>
