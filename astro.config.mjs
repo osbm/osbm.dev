@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 
-import rehypeKatex from 'rehype-katex';
+// import rehypeKatex from 'rehype-katex';
+import rehypeMathjax from 'rehype-mathjax';
 import remarkMath from 'remark-math';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
@@ -18,7 +19,8 @@ export default defineConfig({
         mdx(
             {
                 remarkPlugins: [remarkMath],
-                rehypePlugins: [rehypeKatex],
+                // rehypePlugins: [rehypeKatex],
+                rehypePlugins: [rehypeMathjax],
             }
         ),
         sitemap(),

@@ -24,31 +24,50 @@ const posts = (await getCollection('blog')).sort(
         <main>
             <h1>Blog Overview</h1>
             <p>Here are some of my blog posts:</p>
-            <section>
-                <ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Post Name</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {
                         posts.map((post) => (
-                            <li>
-                                <a href={`/blog/${post.slug}/`}>
-                                    <img
-                                        width={720}
-                                        height={360}
-                                        src={post.data.heroImage}
-                                        alt=""
-                                    />
-                                    <h4 class="title">{post.data.title}</h4>
-                                    <p class="date">
-                                        <FormattedDate
-                                            date={post.data.pubDate}
-                                        />
-                                    </p>
-                                </a>
-                            </li>
+                            <tr>
+                                <td><a href={`/blog/${post.slug}`}>{post.data.title}</a></td>
+                                <td>{post.data.description}</td>
+                                <td><FormattedDate date={post.data.pubDate} /></td>
+                            </tr>
                         ))
                     }
-                </ul>
-            </section>
+                </tbody>
+            </table>
         </main>
         <Footer />
     </body>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: rgb(40, 50, 60);
+        }
+
+        tr:nth-child(even) {
+            background-color: rgb(40, 50, 60);
+        }
+
+        tr:hover {
+            background-color: rgb(50, 60, 70);
+        }
+    </style>
 </html>
