@@ -1,6 +1,4 @@
 import { defineConfig } from 'astro/config';
-
-// import rehypeKatex from 'rehype-katex';
 import rehypeMathjax from 'rehype-mathjax';
 import remarkMath from 'remark-math';
 import mdx from '@astrojs/mdx';
@@ -25,4 +23,9 @@ export default defineConfig({
         ),
         sitemap(),
     ],
+    markdown: {
+        shikiConfig:{
+            theme:'catppuccin-macchiato',
+        },
+    }
 });
