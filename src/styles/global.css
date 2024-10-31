@@ -50,3 +50,28 @@ a {
 a:hover {
     color: rgb(0, 200, 200);
 }
+
+pre {
+    background-color: rgb(30, 35, 50);
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+code {
+    counter-reset: step;
+    counter-increment: step 0;
+    /* add a little space inside */
+    /* margin: 1rem 0; */
+}
+
+code .line::before {
+    content: counter(step);
+    counter-increment: step;
+    width: 1rem;
+    margin-right: 1.5rem;
+    display: inline-block;
+    text-align: right;
+    color: rgba(115,138,148,.4);
+}

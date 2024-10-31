@@ -1,0 +1,92 @@
+---
+title: 'A new P5.js component for Astro'
+description: 'Demonstrating the new P5.js component for Astro'
+pubDate: '2024-10-31'
+includes_p5js: True
+p5_script_path: '../../scripts/hello-world.js'
+---
+
+import P5Sketch from '../../components/P5Sketch.astro';
+
+In 2021, I had a great interest in procedural art and generative coding. I loved watching [The Coding Train](https://www.youtube.com/@TheCodingTrain). So I learned all about [Processing language](https://processing.org/)[^1] and [P5.js](https://p5js.org/). This was super fun and ignited my love for programming again.
+
+[^1]: Nowadays it looks like it has been abandoned in favor of P5.js
+
+I have been drafting a blogpost that i plan to write beautiful plots and even make some of them interactive. So I thought P5.js scripts would be awesome for this considering the fact that i can write components in astro.
+
+Here is the an example blogpost:
+
+
+```astro
+---
+title: 'title'
+description: 'description'
+pubDate: '2024-10-31'
+includes_p5js: True
+p5_script_path: '../../scripts/hello-world.js'
+---
+
+import P5Sketch from '../../components/P5Sketch.astro';
+
+Text before the canvas.
+
+<P5Sketch sketch_path='scripts/hello-world.js' canvas_id='hello-world' figure_id='1' sketch_description='sketch explanation' />
+
+Text after the canvas.
+```
+
+Here you can see the simple P5.js script that creates the canvas:
+
+```js
+function setup() {
+    let mycanvas = createCanvas(400, 400);
+    mycanvas.parent('hello-world');
+    background(0);
+}
+function draw() {
+    fill(255);
+    ellipse(mouseX, mouseY, 80, 80);
+}
+```
+
+And inside the astro component there is a div html tag with the id of *hello-world* so that the P5.js knows where to put the canvas.
+
+There was an issue I encountered when trying to show more than one sketch and it was only generating one of them. And i found out that to generate more than one sketch in one page i needed to merge all scripts into one file like this.
+
+```js
+let canvas1 = function ( p ) {
+  p.setup = function() {
+    ...
+  }
+  p.draw = function() {
+    ...
+  }
+};
+
+let canvas2 = function ( p ) {
+  p.setup = function() {
+    ...
+  }
+  p.draw = function() {
+    ...
+  }
+}
+
+var mycanvas1 = new p5(canvas1, 'canvas1');
+var myp5 = new p5(canvas2, 'canvas2');
+```
+
+Now that I resolve my last issue i can show you the last
+
+Here is how it looks:
+
+<P5Sketch sketch_path='scripts/hello-world.js' canvas_id='hello-world' figure_id='1' sketch_description='Very simple P5.js sketch that prints a circle at the position of your cursor' />
+
+
+---
+
+I have also been thinking to add a component for [THREE.js](https://threejs.org/). I made a [Sphere Eversion Animation](https://osmanbayram.com/sphere-eversion-animation/) once. And i loved it a lot. But i thought that this would be a little overkill.
+
+See you in the next one ❤️❤️❤️
+
+
