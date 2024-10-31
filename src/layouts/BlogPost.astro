@@ -10,7 +10,7 @@ import type { CollectionEntry } from "astro:content";
 
 type Props = CollectionEntry<"blog">["data"];
 
-const { title, description, pubDate, updatedDate, filename, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, filename, heroImage, includes_p5js, p5_script_path } = Astro.props;
 
 const commitHistoryUrl = "https://github.com/osbm/osbm.dev/commits/main/src/content/blog/" + filename;
 
@@ -21,6 +21,13 @@ const commitHistoryUrl = "https://github.com/osbm/osbm.dev/commits/main/src/cont
     <head>
         <Metadata />
         <title>{title}</title>
+        <!-- if includes_p5js add p5_js -->
+        {
+            includes_p5js && (
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.0/p5.min.js" integrity="sha512-q0pQ5+tDUElSVqirQ85OnmLKQvPjeYPlRjJq2dsOwhrGxGjFl0/c36Z+O5DhZNkFMvyGVSpNZ+Q+pjhG0U47iw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <script is:inline src={p5_script_path}></script>
+            )
+        }
     </head>
     <body>
         <Header />

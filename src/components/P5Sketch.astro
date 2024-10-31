@@ -1,15 +1,9 @@
 ---
-const { sketch_path, sketch_name, figure_id, sketch_description }  = Astro.props;
-// https://github.com/osbm/osbm.dev/blob/main/ + sketch_path(first 3 characters removed)
-const sketch_url = 'https://github.com/osbm/osbm.dev/blob/main/' + sketch_path.slice(3);
-
+const { sketch_path, canvas_id, figure_id, sketch_description }  = Astro.props;
+const sketch_url = 'https://github.com/osbm/osbm.dev/blob/main/' + sketch_path;
 ---
 
-<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-
-
-<div class="p5-div" id={sketch_name}>
-    <script is:inline src={sketch_path}></script>
+<div class="p5-div" id={canvas_id}>
 </div>
 <p><b>Figure {figure_id}</b>: {sketch_description} <a href={sketch_url}><b>Sketch source</b></a>
 
