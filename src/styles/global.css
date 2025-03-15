@@ -12,15 +12,15 @@ html {
 }
 
 body {
-    margin: 0 auto;
-    width: 100%;
-    max-width: 90ch;
-    padding: 1rem;
-    line-height: 1.5;
     display: flex;
     flex-direction: column;
+    font-family: 'Cascadia Code', monospace;
     height: 100%;
-
+    line-height: 1.5;
+    margin: 0 auto;
+    max-width: 90ch;
+    padding: 1rem;
+    width: 100%;
 }
 
 header a {
@@ -74,4 +74,12 @@ code .line::before {
     display: inline-block;
     text-align: right;
     color: rgba(115,138,148,.4);
+}
+
+@font-face {
+    font-family: 'Cascadia Code';
+    src: url('/fonts/CascadiaCode.woff2') format('woff2'),
+            url('/fonts/CascadiaCode.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
 }
