@@ -25,3 +25,8 @@ pnpm-debug.log*
 
 # i dont know why astro keeps re-creating this file
 src/env.d.ts
+
+# nix files
+result
+.direnv/
+
