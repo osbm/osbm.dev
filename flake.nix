@@ -11,6 +11,7 @@
       devShells."${system}".default = pkgs.mkShell {
         packages = with pkgs; [
           nodejs
+          nodePackages.npm
         ];
         shellHook = ''
           echo Start developing the osbm.dev
