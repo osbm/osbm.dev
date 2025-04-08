@@ -78,8 +78,7 @@ code .line::before {
 
 @font-face {
     font-family: 'Cascadia Code';
-    src: url('/fonts/CascadiaCode.woff2') format('woff2'),
-            url('/fonts/CascadiaCode.ttf') format('truetype');
+    src: url('/fonts/CascadiaCode.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
