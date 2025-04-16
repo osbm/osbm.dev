@@ -2,6 +2,7 @@
 title: 'Nix: A New Way to Think About Software'
 description: 'Nix is the only acceptable environment for a scientist to do their research on.'
 pubDate: '2025-04-15'
+updatedDate: '2025-04-16'
 ---
 
 > "After all, all devices have their dangers. The discovery of speech introduced communication—and lies."
@@ -145,9 +146,9 @@ And also we test the package before concluding the build and saving it to the ni
 
 # Nixpkgs
 
-You may have noticed that while this is a great way to build packages, in order to compile a user level package like `firefox` you need to write derivations for thousands of packages because of chain of dependencies, but no worries, the nixpkgs project has already done that for you.
+You may have noticed that while this is a great way to build packages, in order to compile a user level package like `firefox` you need to write derivations for thousands of packages because of chain of dependencies, but no worries, the [nixpkgs](https://github.com/NixOS/nixpkgs) project has already done that for you.
 
-Nix plays this game to its logical conclusion. Nixpkgs is a git repository that includes recipes for** +120.000 packages** and it compiles every project under the sun by the help of thousands of contributors. It is the largest collection of packages in the world.
+Nix plays this game to its logical conclusion. Nixpkgs is a git repository that includes recipes for **+120.000 packages** and it compiles every project under the sun by the help of thousands of contributors. It is the largest collection of packages in the world.
 
 {/* TODO make a image component */}
 <br/>
@@ -197,11 +198,16 @@ This means that if you ever mess up something in your system you can just reboot
 # Community Projects
 
 There are many community projects that are intented to make the Nix experience better. Here are some of them:
-- Home Manager: A dotfile manager, (means your user configuration is also managed by nix)
-- NixOps: A deployment tool for NixOS
-- Nix-on-droid: A project to run Nix on Android
-- nixvim: A project to build neovim plugins, configurations and settings using nix
+- [Home Manager](https://github.com/nix-community/home-manager): A dotfile manager, (means your user configuration is also managed by nix)
+- [NixOps](https://github.com/NixOS/nixops): A deployment tool for NixOS
+- [Nix-on-droid](https://github.com/nix-community/nix-on-droid/): A project to run Nix on Android using terminal emulator.
+- [nixvim](https://github.com/nix-community/nixvim): A project to build neovim plugins, configurations and settings using nix
 
+# My projects
+
+For example, my development enviroenment for this website is managed by nix. [Here is the source code](https://github.com/osbm/osbm.dev).
+
+And most importantly i manage all my machiness using the nix configuration with a new experimental feature called [flakes](https://wiki.nixos.org/wiki/Flakes). This means that i can easily reproduce my entire machine on any other machine. And also means that anyone can replicate my setup. Being able to use other peoples nixos configurations without much friction is absolutely amazing. I can just copy paste their configuration and run it on my machine. This is the power of Nix.
 
 # Conclusion
 
