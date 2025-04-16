@@ -1,0 +1,210 @@
+---
+title: 'Nix: A New Way to Think About Software'
+description: 'Nix is the only acceptable environment for a scientist to do their research on.'
+pubDate: '2025-04-15'
+---
+
+> "After all, all devices have their dangers. The discovery of speech introduced communication—and lies."
+> - **Isaac Asimov, Robot Visions**
+
+Lets say you are a scientist that want to do some simulation/research on the computer. In order to make sure your computations are **reprocudible** and **reliable** you need to make sure that your software environment is **reproducible** and **reliable** just like in any other scientific environment.
+
+But you cant just drop everything and spend years to build perfectly reproducible software for everyone on the planet. You just need to get your dependencies right and get your software running.
+
+You first try **open source** operating systems like ubuntu or fedora. You use their package managers to install the software you need. But you run into some problems:
+
+## Dependency Hell
+
+Scenario 1: You want to install 2 packages that have one same dependency (lets call it `foo`) but they require different versions of it. Normally that depency is expected to live in `/bin/foo` path in a system.
+
+What are the options you have?
+1. **Modify the packages to use different versions of the dependency.** This is not a good option because you will have to maintain your own fork of the packages.
+2. **Use containers. **This is a good option but it has its own overhead and complexity, especially when it comes to networking and storage usage.
+3. **Use virtual operating systems. **This is considerably slower than the container approach because unlike containers, virtual operating systems runs virtualized hardware and their own kernel.
+
+<img src="https://imgs.xkcd.com/comics/python_environment.png" alt="Containers" width="50%" />
+
+
+## "It works on my machine"
+
+Scenerio 2: You want to try out some new lesser-known software you saw on the [GitHub](https://github.com). You saw that the developer has also provided a precompiled binary. But there is also instructions to build the software from the source. So you try that, install the dependencies, build the software. Its all good. But you realize that the binary you compiled is different from the one provided by the developer. You start to question the integrity of the binary. Did i mess up the compilation? Did the developer mess up the compilation? Did the developer provide a malicious binary? How can you trust precompiled software online? How can the developer help with an error that they cant recreate on their machine?
+
+What are the options you have?
+
+1. **Use a package manager.** This doesnt actually solve the problem, it just pushes it to the package manager. You still have to trust the package manager.
+2. **Propose to the developer to provide a docker image with the software. **But you realize the every time docker image is built it pulls the latest version of the dependencies. So you are back to square one. So the end result is not %100 reproducible.
+
+
+
+## No rollback
+
+Scenario 3: You are using a package manager to install software. You install a critical driver package and it works. Then you install another package that overrides the dependencies of the first package. Now your first package does not work. Now your entire system is broken. You cant undo your changes because the system cant operate anymore. You have to reinstall the entire system. This is a nightmare scenario.
+
+What are the options you have?
+1. **Use a package manager that stops you from overriding all existing dependencies.** Now it is almost impossible to install new things because dependencies are so strict.
+2. **Use a package manager that allows you to override the dependencies** if you want to. But now you have to just risk the system being broken if you ever override the dependencies.
+
+
+# Solution: Nix
+
+Nix comes from the Phd thesis of Eelco Dolstra, a computer scientist at Utrecht University. The thesis is named **The Purely Functional Software Deployment Model**. It explains the Nix package manager and the Nix programming language. The thesis is available [here](https://edolstra.github.io/pubs/phd-thesis.pdf).
+
+
+> First of all when people say nix, they are usually referring to the **nix package manager**. But there is also the **nix programming language** that defines the **derivations**.
+
+Nix builds your software in a reproducible, declarative and reliable way. Nix lets you build any version of any software on any machine.[^1]
+
+[^1]: This is of course not %100 true. But it is the closest to this being the reality we have ever been. Inspired from [this youtube video](https://youtu.be/5D3nUU1OVx8)
+
+With Nix, each package is built in complete isolation. That means if you want to install two packages that depend on different versions of foo, that's totally fine — each one will get its own version of foo, and they won't step on each other's toes. No /bin/foo confusion. No overwriting. Just peace.
+
+Every package ends up in its own unique directory like:
+```
+/nix/store/86wz1yikdk58hq16762rqp1r2ja68dls-foo-1.2.3
+```
+And every package's build process and dependencies are recorded in a **derivation** file.
+
+This file is a recipe that describes how to build the package, including all its dependencies and build instructions. And it also tracks the derivation files of those dependencies. This means if the further down the chain, you change a dependency or the build instructions, you get a new derivation file. This is how Nix keeps track of everything.
+
+That weird hash on our software path, where does it come from? It is a hash of the derivation file. So if you change the derivation file, you get a new hash. This means that if you ever want to go back to a previous version of a package, you can just use the old hash. This is how Nix keeps track of everything.
+
+## Build process
+
+Nix uses a purely functional programming language to declaratively describe the build process. Here is an simple pseudo example of a nix derivation
+
+```nix
+{ stdenv, fetchurl }:
+stdenv.mkDerivation {
+  name = "hello-2.10";
+  src = fetchurl {
+    url = "https://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz";
+    sha256 = "0v8j7x1g4q4k5lkdjfhskfjhskdjf";
+  };
+
+  buildInputs = [ stdenv.cc ];
+
+  buildPhase = ''
+    make
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp hello $out/bin/
+  '';
+}
+```
+
+Inside this derivation you need to specify which files you need to download by a fetch function and also provide the hash of that file. If the hash does not match the file, the build will fail.
+
+You also need to specify how the build process will be done. But in this instance the buildPhase and installPhase are unnecessary because the default buildPhase and installPhase are already defined in the stdenv. This makes it easy to write derivations for new packages. For example nix also provides a package builder for python packages:
+
+```nix
+{
+  lib,
+  setuptools,
+  cython,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-xdist,
+}:
+
+buildPythonPackage rec {
+  pname = "runstats";
+  version = "2.0.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "grantjenks";
+    repo = "python-runstats";
+    tag = "v${version}";
+    hash = "sha256-YF6S5w/ccWM08nl9inWGbaLKJ8/ivW6c7A9Ny20fldU=";
+  };
+
+  build-system = [
+    setuptools
+    cython
+  ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "runstats" ];
+}
+```
+
+Nix has these kind of derivations for all of the programming languages. This means for the person who know how to write python, it is easy to write a derivation for a new python package.
+
+So why do we need to specify hashes of the files we are downloading? Because inside the nix build sandbox, there is no internet, time is set to 1970 almost everything is read-only. This means that if you want to build a package, you need to provide everything it needs to build.
+
+And also we test the package before concluding the build and saving it to the nix store. This makes sure that the package is working and it is not broken.
+
+# Nixpkgs
+
+You may have noticed that while this is a great way to build packages, in order to compile a user level package like `firefox` you need to write derivations for thousands of packages because of chain of dependencies, but no worries, the nixpkgs project has already done that for you.
+
+Nix plays this game to its logical conclusion. Nixpkgs is a git repository that includes recipes for** +120.000 packages** and it compiles every project under the sun by the help of thousands of contributors. It is the largest collection of packages in the world.
+
+{/* TODO make a image component */}
+<br/>
+<img src="https://repology.org/graph/map_repo_size_fresh.svg" alt="Nixpkgs" width="100%" />
+<br/>
+
+<div style="text-align: center;">
+  <p>Nixpkgs is the largest collection of **fresh** packages in the world</p>
+</div>
+
+
+I even maintain couple of python packages in the nixpkgs repository. :)
+
+The main advantage i see is, even though i dont know much about other programming languages. I can easily see the steps of compilation and the dependencies of the packages. When people miss a software for their own needs, they need to write a derivation for it. And this way they are just one step away from being a contributor to the nixpkgs repository. This makes it the closest path of resistance to contribute more nix derivations to the nixpkgs repository.
+
+# cache.nixos.org
+
+Because our way of building software is reproducible and reliable, we can cache the built packages. This means that if you want to install the `/nix/store/86wz1yikdk58hq16762rqp1r2ja68dls-foo-1.2.3` package, you can check if this specific path exists in the nixos cache, and most often than not it does. This means that most of the time installing a package is just downloading it from the cache. But you can just disable the nixos cache and wait for days to build the every package from scratch according to the nixpkgs derivations.
+
+# NixOS
+
+NixOS is the operating system that uses the Nix package manager to build itself. The entire operating system, services, and user applications and configuration and even firewall rules are all defined in a single file. This means that you can easily reproduce your entire operating system on any machine. And you can modify the parts of nixpkgs package manager to build your own flavor of software and services.
+
+
+You can specify everything about the machine:
+```
+{
+  boot.loader.grub.device = "/dev/sda";
+  fileSystems."/".device = "/dev/sda1";
+  services.sshd.enable = true;
+}
+```
+
+{/* add the image in public/images/nix-machines.png */}
+
+Here is my nix configured machines:
+<img src="/images/nix-machines.jpg" alt="NixOS" width="100%" />
+
+# Rollback
+
+Because everything about the Nixos is purely functional and stateless, you can rollback to the previous state of the system during bootup. Like this:
+
+<img src="/images/nixos-boot-menu.png" alt="NixOS" width="100%" />
+
+This means that if you ever mess up something in your system you can just reboot it and select the previous working state of the machine. It is awesome.
+
+# Community Projects
+
+There are many community projects that are intented to make the Nix experience better. Here are some of them:
+- Home Manager: A dotfile manager, (means your user configuration is also managed by nix)
+- NixOps: A deployment tool for NixOS
+- Nix-on-droid: A project to run Nix on Android
+- nixvim: A project to build neovim plugins, configurations and settings using nix
+
+
+# Conclusion
+
+Nix is a powerful tool to build software, any software. It can manage any type of configuration and build system using its own `/nix/store` folder and the community driven `nixpkgs` repository.
+
+In my honest opinion, it is the only acceptable environment for a scientist to do their research on.
