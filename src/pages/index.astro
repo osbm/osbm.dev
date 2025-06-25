@@ -15,17 +15,44 @@ import Metadata from "../components/Metadata.astro";
   <body>
     <Header />
     <main>
-      <h1>About myself</h1>
+      <section class="intro">
+        <h1>Osman Faruk Bayram</h1>
+        <p class="pronunciation"><a href="http://ipa-reader.xyz/?text=osman%20fa%C9%BEuk%CA%B0%20ba%CC%9Fj%C9%BEam&voice=Joey" target="_blank">/osman faɾukʰ ba̟jɾam/</a></p>
+        <p class="tagline">AI researcher, programmer, open-source enthusiast</p>
+      </section>
 
-      AI researcher, programmer, open-source enthusiast.
-      <br />
-      Github: <a href="https://github.com/osbm">osbm</a>
-      Hugging Face: <a href="https://huggingface.co/osbm">osbm</a>
-      Bluesky: <a href="https://bsky.app/profile/osbm.dev">@osbm.dev</a>
-      <p>
-        Please forgive me for the design of this website. I am very new at this.
-        I will learn CSS and make it look better soon. I promise
-      </p>
+      <section class="about">
+        <h2>About me</h2>
+        <ul>
+          <li>Currently studying <strong>Artificial Intelligence</strong> at <a href="https://bau.edu.tr/" target="_blank">Bahcesehir University</a>. Developing the machine spirit.</li>
+          <li>Using <strong>NixOS</strong> with KDE plasma. Here is my <a href="https://github.com/osbm/flake" target="_blank">nix configuration flake</a></li>
+          <li>Built an open source split mechanical keyboard named <a href="https://github.com/foostan/crkbd" target="_blank">Corne</a> and <a href="https://github.com/osbm/qmk-keymap-corne" target="_blank">here is my keymap</a></li>
+          <li>Casually studying Japanese. <a href="https://www.wanikani.com/users/osbm" target="_blank">Here is my wanikani profile</a></li>
+          <li>Here is my PGP key (send me an encrypted message 🕵️): <a href="https://github.com/osbm.gpg" target="_blank">github.com/osbm.gpg</a></li>
+        </ul>
+      </section>
+
+      <section class="links">
+        <h2>Find me at</h2>
+        <div class="social-links">
+          <a href="https://github.com/osbm" target="_blank">GitHub</a>
+          <a href="https://huggingface.co/osbm" target="_blank">Hugging Face</a>
+          <a href="https://bsky.app/profile/osbm.dev" target="_blank">Bluesky</a>
+          <a href="https://www.linkedin.com/in/osbm/" target="_blank">LinkedIn</a>
+          <a href="https://stackoverflow.com/users/9279225/osbm" target="_blank">Stack Overflow</a>
+          <a href="https://www.kaggle.com/osmanf" target="_blank">Kaggle</a>
+          <a href="https://fosstodon.org/@osbm" target="_blank">Mastodon</a>
+          <a href="https://hub.docker.com/u/osbm" target="_blank">Docker Hub</a>
+          <a href="https://wandb.ai/osbm" target="_blank">wandb</a>
+        </div>
+      </section>
+
+      <section class="note">
+        <p>
+          <em>Please forgive me for the design of this website. I am very new at this.
+          I will learn CSS and make it look better soon. I promise.</em>
+        </p>
+      </section>
     </main>
     <Footer />
   </body>
