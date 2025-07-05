@@ -107,39 +107,57 @@ import Metadata from "../components/Metadata.astro";
         </div>
         <div class="social-grid">
           <a href="https://github.com/osbm" target="_blank" class="social-card">
-            <div class="social-icon">🐙</div>
+            <div class="social-icon">
+              <img src="/svgs/github.svg" alt="GitHub" width="24" height="24" />
+            </div>
             <span>GitHub</span>
           </a>
           <a href="https://huggingface.co/osbm" target="_blank" class="social-card">
-            <div class="social-icon">🤗</div>
+            <div class="social-icon">
+              <img src="/svgs/huggingface.svg" alt="Hugging Face" width="24" height="24" />
+            </div>
             <span>Hugging Face</span>
           </a>
           <a href="https://bsky.app/profile/osbm.dev" target="_blank" class="social-card">
-            <div class="social-icon">☁️</div>
+            <div class="social-icon">
+              <img src="/svgs/bluesky.svg" alt="Bluesky" width="24" height="24" />
+            </div>
             <span>Bluesky</span>
           </a>
           <a href="https://www.linkedin.com/in/osbm/" target="_blank" class="social-card">
-            <div class="social-icon">💼</div>
+            <div class="social-icon">
+              <img src="/svgs/linkedin.svg" alt="LinkedIn" width="24" height="24" />
+            </div>
             <span>LinkedIn</span>
           </a>
           <a href="https://stackoverflow.com/users/9279225/osbm" target="_blank" class="social-card">
-            <div class="social-icon">📚</div>
+            <div class="social-icon">
+              <img src="/svgs/stackoverflow.svg" alt="Stack Overflow" width="24" height="24" />
+            </div>
             <span>Stack Overflow</span>
           </a>
           <a href="https://www.kaggle.com/osmanf" target="_blank" class="social-card">
-            <div class="social-icon">📊</div>
+            <div class="social-icon">
+              <img src="/svgs/kaggle.svg" alt="Kaggle" width="24" height="24" />
+            </div>
             <span>Kaggle</span>
           </a>
           <a href="https://fosstodon.org/@osbm" target="_blank" class="social-card">
-            <div class="social-icon">🐘</div>
+            <div class="social-icon">
+              <img src="/svgs/mastodon.svg" alt="Mastodon" width="24" height="24" />
+            </div>
             <span>Mastodon</span>
           </a>
           <a href="https://hub.docker.com/u/osbm" target="_blank" class="social-card">
-            <div class="social-icon">🐳</div>
+            <div class="social-icon">
+              <img src="/svgs/docker.svg" alt="Docker" width="24" height="24" />
+            </div>
             <span>Docker Hub</span>
           </a>
           <a href="https://wandb.ai/osbm" target="_blank" class="social-card">
-            <div class="social-icon">📈</div>
+            <div class="social-icon">
+              <img src="/svgs/wandb.svg" alt="Weights & Biases" width="24" height="24" />
+            </div>
             <span>wandb</span>
           </a>
         </div>
@@ -425,7 +443,20 @@ import Metadata from "../components/Metadata.astro";
       }
 
       .social-icon {
-        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .social-icon img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+      }
+
+      .social-card:hover .social-icon img {
+        transform: scale(1.1);
       }
 
       /* Animations */
