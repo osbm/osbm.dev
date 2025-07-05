@@ -17,57 +17,341 @@ const posts = (await getCollection('blog')).sort(
 <html lang="en">
     <head>
         <Metadata />
-        <title>Blogs</title>
+        <title>Blog - osbm</title>
     </head>
     <body>
         <Header />
         <main>
-            <h1>Blog Overview</h1>
-            <p>Here are some of my blog posts:</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Post Name</th>
-                        <th>Description</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <!-- Hero Section -->
+            <section class="blog-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">Blog</span>
+                    </h1>
+                    <p class="hero-subtitle">Thoughts, tutorials, and insights about AI, programming, and open source</p>
+                    <div class="stats">
+                        <div class="stat">
+                            <span class="stat-number">{posts.length}</span>
+                            <span class="stat-label">Posts</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">{Math.floor((Date.now() - posts[posts.length - 1]?.data.pubDate.valueOf() || Date.now()) / (1000 * 60 * 60 * 24))}</span>
+                            <span class="stat-label">Days Active</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blog Posts Section -->
+            <section class="blog-posts">
+                <div class="posts-grid">
                     {
                         posts.map((post) => (
-                            <tr>
-                                <td><a href={`/blog/${post.slug}`}>{post.data.title}</a></td>
-                                <td>{post.data.description}</td>
-                                <td><FormattedDate date={post.data.pubDate} /></td>
-                            </tr>
+                            <article class="post-card">
+                                <div class="post-header">
+                                    <div class="post-meta">
+                                        <span class="post-date">
+                                            <FormattedDate date={post.data.pubDate} />
+                                        </span>
+                                        <span class="post-category">Blog</span>
+                                    </div>
+                                    <h2 class="post-title">
+                                        <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                                    </h2>
+                                </div>
+                                
+                                <div class="post-content">
+                                    <p class="post-description">{post.data.description}</p>
+                                </div>
+                                
+                                <div class="post-footer">
+                                    <a href={`/blog/${post.slug}`} class="read-more">
+                                        Read More
+                                        <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </article>
                         ))
                     }
-                </tbody>
-            </table>
+                </div>
+            </section>
+
+            <!-- Empty State -->
+            {posts.length === 0 && (
+                <section class="empty-state">
+                    <div class="empty-content">
+                        <div class="empty-icon">📝</div>
+                        <h2>No posts yet</h2>
+                        <p>I'm working on some interesting content. Check back soon!</p>
+                    </div>
+                </section>
+            )}
         </main>
         <Footer />
+
+        <style>
+            /* Hero Section */
+            .blog-hero {
+                min-height: 40vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 4rem 2rem;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .blog-hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: radial-gradient(circle at 30% 20%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 70% 80%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+                z-index: -1;
+            }
+
+            .hero-content {
+                text-align: center;
+                max-width: 800px;
+                animation: fadeInUp 1s ease-out;
+            }
+
+            .hero-title {
+                font-size: 4rem;
+                margin: 0 0 1rem 0;
+                line-height: 1.1;
+            }
+
+            .gradient-text {
+                background: linear-gradient(135deg, #00ffff 0%, #ff00ff 50%, #ffff00 100%);
+                background-size: 200% 200%;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: gradientShift 3s ease-in-out infinite;
+            }
+
+            .hero-subtitle {
+                font-size: 1.3rem;
+                color: rgb(200, 200, 255);
+                margin: 1.5rem 0;
+                opacity: 0.9;
+            }
+
+            .stats {
+                display: flex;
+                justify-content: center;
+                gap: 3rem;
+                margin-top: 2rem;
+            }
+
+            .stat {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+                font-weight: bold;
+                color: #00ffff;
+            }
+
+            .stat-label {
+                font-size: 0.9rem;
+                color: rgb(200, 200, 255);
+                opacity: 0.8;
+            }
+
+            /* Blog Posts Section */
+            .blog-posts {
+                padding: 4rem 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .posts-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 2rem;
+            }
+
+            .post-card {
+                background: rgba(30, 35, 50, 0.5);
+                border: 1px solid rgba(0, 255, 255, 0.2);
+                border-radius: 15px;
+                padding: 2rem;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            .post-card:hover {
+                transform: translateY(-5px);
+                border-color: rgba(0, 255, 255, 0.5);
+                box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+            }
+
+            .post-header {
+                margin-bottom: 1.5rem;
+            }
+
+            .post-meta {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .post-date {
+                color: rgb(200, 200, 255);
+                opacity: 0.8;
+            }
+
+            .post-category {
+                background: rgba(0, 255, 255, 0.2);
+                color: #00ffff;
+                padding: 0.2rem 0.6rem;
+                border-radius: 12px;
+                font-size: 0.8rem;
+                font-weight: 500;
+            }
+
+            .post-title {
+                margin: 0;
+                font-size: 1.5rem;
+                line-height: 1.3;
+            }
+
+            .post-title a {
+                color: #ffffff;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .post-title a:hover {
+                color: #00ffff;
+            }
+
+            .post-content {
+                flex: 1;
+                margin-bottom: 1.5rem;
+            }
+
+            .post-description {
+                color: rgb(200, 200, 255);
+                line-height: 1.6;
+                margin: 0;
+            }
+
+            .post-footer {
+                margin-top: auto;
+            }
+
+            .read-more {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                color: #00ffff;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+
+            .read-more:hover {
+                color: #ff00ff;
+                transform: translateX(5px);
+            }
+
+            .arrow-icon {
+                transition: transform 0.3s ease;
+            }
+
+            .read-more:hover .arrow-icon {
+                transform: translateX(3px);
+            }
+
+            /* Empty State */
+            .empty-state {
+                padding: 4rem 2rem;
+                text-align: center;
+            }
+
+            .empty-content {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .empty-icon {
+                font-size: 4rem;
+                margin-bottom: 1rem;
+            }
+
+            .empty-state h2 {
+                color: #ffffff;
+                margin-bottom: 1rem;
+            }
+
+            .empty-state p {
+                color: rgb(200, 200, 255);
+                opacity: 0.8;
+            }
+
+            /* Animations */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes gradientShift {
+                0%, 100% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .blog-hero {
+                    padding: 2rem 1rem;
+                }
+
+                .hero-title {
+                    font-size: 2.5rem;
+                }
+
+                .hero-subtitle {
+                    font-size: 1.1rem;
+                }
+
+                .stats {
+                    gap: 2rem;
+                }
+
+                .blog-posts {
+                    padding: 2rem 1rem;
+                }
+
+                .posts-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .post-card {
+                    padding: 1.5rem;
+                }
+            }
+        </style>
     </body>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 8px;
-            text-align: center;
-        }
-
-        th {
-            background-color: rgb(40, 50, 60);
-        }
-
-        tr:nth-child(even) {
-            background-color: rgb(40, 50, 60);
-        }
-
-        tr:hover {
-            background-color: rgb(50, 60, 70);
-        }
-    </style>
 </html>
